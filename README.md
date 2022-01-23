@@ -2,18 +2,18 @@
 Cute Viewer - Jquery SinglePage Application
 
 
-##link pages
+## link pages
 ```
 <a href="#views/page1.html">Page 1</a>
 <a href="#views/page2.html">Page 2</a>
 ```
 
-##wrapper
+## wrapper
 ```
 <div id="viewer"></div>
 ```
 
-##to init viewer
+## to init viewer
 ```
 var viewer = new CuteViewer("#viewer");
 
