@@ -1,0 +1,8 @@
+{
+    "name": "cute-app",
+    "version": "0.0.1",
+    "dependencies": {
+        "bootstrap": "^5.1.3",
+        "jquery": "^3.6.0"
+    }
+}
