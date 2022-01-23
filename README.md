@@ -2,7 +2,11 @@
 Cute Viewer - Jquery SinglePage Application
 
 
-Kullanımı
+
+```
+        <div id="viewer"></div>
+```
+
 
 ```
 $(document).ready(function () {
