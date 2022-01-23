@@ -29,16 +29,18 @@ class CuteViewer {
         this.settings = $.extend(true, this.settings, options);
         this.$wrapper = $(this.WrapperHtml).appendTo(this.$this);
         this.setHashChangeEvent();
+        this.checkHashUrl();
     }
 
 
     checkHashUrl() {
-
         var url = this.getHashUrl();
         if (url) {
             setTimeout(() => {
-                openUrlInView(url);
+                this.openUrlInView(url);
             }, 200);
+        } else {
+            this.goToMainPage();
         }
     }
 
@@ -51,8 +53,8 @@ class CuteViewer {
             url = hash.split("#")[1];
         }
 
-        if (!url && settings.indexUrl) {
-            url = settings.indexUrl;
+        if (!url && this.settings.indexUrl) {
+            url = this.settings.indexUrl;
         }
 
         return url;
@@ -84,14 +86,13 @@ class CuteViewer {
 
     changeHashParameter(key, value, reload) {
         var url = this.getHashUrl();
-        var self = this;
         if ($.isPlainObject(key)) {
-            $.each(key, function (k, v) {
-                url = self.updateQueryStringParameter(url, k, v);
+            $.each(key, (k, v) => {
+                url = this.updateQueryStringParameter(url, k, v);
             });
             reload = key.reload;
         } else {
-            url = self.updateQueryStringParameter(url, key, value);
+            url = this.updateQueryStringParameter(url, key, value);
         }
 
         if (reload !== true) {
@@ -102,9 +103,8 @@ class CuteViewer {
     }
 
     goToMainPage() {
-        var self = this;
-        setTimeout(function () {
-            self.openUrlInView(self.settings.indexUrl);
+        setTimeout(() => {
+            this.openUrlInView(self.settings.indexUrl);
         }, 200);
     }
 
@@ -121,7 +121,7 @@ class CuteViewer {
         if (!title) {
             var menuData;
             if (url && this.menuDataSource) {
-                menuData = this.menuDataSource.data().filter(function (v) { return v.url == url })[0];
+                menuData = this.menuDataSource.data().filter((v) => v.url == url)[0];
             }
 
             if (menuData && menuData.title) {
@@ -139,19 +139,16 @@ class CuteViewer {
     onlyChangeHash = false;
 
     setHashChangeEvent() {
-        var self = this;
-        function onHashChange(e, v) {
-            var url = self.getHashUrl();
-            if (url && self.onlyChangeHash != true) {
-                self.openUrlInView(url);
+        window.addEventListener('hashchange', (e, v) => {
+            var url = this.getHashUrl();
+            if (url && this.onlyChangeHash != true) {
+                this.openUrlInView(url);
             }
 
-            if (self.onlyChangeHash == true) {
-                self.onlyChangeHash = false;
+            if (this.onlyChangeHash == true) {
+                this.onlyChangeHash = false;
             }
-        }
-
-        window.addEventListener('hashchange', onHashChange, false);
+        });
     }
 
     getWrapper() {
@@ -163,16 +160,16 @@ class CuteViewer {
     }
 
     getCurrentView() {
-        return this.VIEWLIST.filter(function (v) { return v.visible })[0];
+        return this.VIEWLIST.filter((v) => v.visible)[0];
     }
 
     removeCurrent() {
-        this.VIEWLIST.filter(function (v) { return v.visible }).forEach(function (v) {
+        this.VIEWLIST.filter((v) => v.visible).forEach(function (v) {
             if (v.element && v.element.remove) {
                 v.element.remove();
             }
         });
-        this.VIEWLIST = this.VIEWLIST.filter(function (v) { return !v.visible })
+        this.VIEWLIST = this.VIEWLIST.filter((v) => !v.visible)
     }
 
     openUrl(url, title, removeCurrent) {
@@ -195,14 +192,14 @@ class CuteViewer {
             this.$this.removeCurrent();
         }
 
-        this.VIEWLIST.filter(function (v) { return v.visible }).forEach(function (v) {
+        this.VIEWLIST.filter((v) => v.visible).forEach((v) => {
             if (v.element) {
                 v.element.hide();
                 v.visible = false;
             }
         });
 
-        var currentView = this.VIEWLIST.filter(function (v) { return v.url == url; })[0];
+        var currentView = this.VIEWLIST.filter((v) => v.url == url)[0];
 
         if (currentView) {
             currentView.visible = true;
@@ -230,7 +227,7 @@ class CuteViewer {
                 url = urlArray[0] + "?" + search.toString();
             }
 
-            $element.load(url, function () {
+            $element.load(url, () => {
                 $element.trigger("show", [url]);
             });
         }
@@ -244,27 +241,10 @@ class CuteViewer {
         return currentView;
     }
 
-    setUrlHrefClicks($body) {
-        var self = this;
-        if (!$body) {
-            $body = $("body");
-        }
-
-        $body.find("a." + this.linkClassName).on("click", function (e) {
-            var url = $(this).attr("href");
-            if (url !== undefined && url != "" && url != "#") {
-                e.preventDefault();
-                self.openUrl(url);
-
-            }
-        });
-    }
-
     setRoots(list) {
-        var self = this;
         if ($.isArray(list)) {
-            list.forEach(function (v) {
-                self.ROOTLIST.push(v);
+            list.forEach((v) => {
+                this.ROOTLIST.push(v);
             })
         }
     }

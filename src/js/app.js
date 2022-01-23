@@ -5,6 +5,4 @@ $(document).ready(function () {
     viewer.init({
         indexUrl: "views/index.html"
     });
-    viewer.goToMainPage();
-    console.log(this);
 })
