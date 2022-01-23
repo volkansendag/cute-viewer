@@ -1,20 +1,20 @@
 class CuteViewer {
-    DEFAULT_TITLE = "Evolution";
     $wrapper;
     VIEWLIST = [];
     ROOTLIST = [];
-    linkClassName = "cute-viewer-link";
-    appVersion = window.APP_VERSION || 2;
     menuDataSource;
-    WrapperHtml = `<div class="ct-wrapper"></div>`
-    ViewWrapperHtml = `<div class="ct-view-wrapper"></div>`
+
     settings = {
         // These are the defaults.
+        appVersion: window.APP_VERSION || 2,
         replaceState: false,
         replaceHash: true,
         color: "#556b2f",
         backgroundColor: "white",
-        cacheable: true
+        cacheable: true,
+        ViewWrapperHtml: `<div class="ct-view-wrapper"></div>`,
+        WrapperHtml: `<div class="ct-wrapper"></div>`,
+        DEFAULT_TITLE: "CuteDev"
     }
 
     constructor($el, options) {
@@ -27,7 +27,7 @@ class CuteViewer {
 
     init(options) {
         this.settings = $.extend(true, this.settings, options);
-        this.$wrapper = $(this.WrapperHtml).appendTo(this.$this);
+        this.$wrapper = $(this.settings.WrapperHtml).appendTo(this.$this);
         this.setHashChangeEvent();
         this.checkHashUrl();
     }
@@ -130,7 +130,7 @@ class CuteViewer {
         }
 
         if (!title) {
-            title = this.DEFAULT_TITLE;
+            title = this.settings.DEFAULT_TITLE;
         }
 
         document.title = title + " - " + (window.config ? window.config.AppName : "Cute Dev")
@@ -164,7 +164,7 @@ class CuteViewer {
     }
 
     removeCurrent() {
-        this.VIEWLIST.filter((v) => v.visible).forEach(function (v) {
+        this.VIEWLIST.filter((v) => v.visible).forEach((v) => {
             if (v.element && v.element.remove) {
                 v.element.remove();
             }
@@ -174,7 +174,7 @@ class CuteViewer {
 
     openUrl(url, title, removeCurrent) {
         if (removeCurrent == true) {
-            this.$this.removeCurrent();
+            this.removeCurrent();
         }
 
         var hash = '#' + url;
@@ -189,7 +189,7 @@ class CuteViewer {
             throw DOMException("url boş olamaz.");
 
         if (this.settings.cacheable === false) {
-            this.$this.removeCurrent();
+            this.removeCurrent();
         }
 
         this.VIEWLIST.filter((v) => v.visible).forEach((v) => {
@@ -206,7 +206,7 @@ class CuteViewer {
             currentView.element.show();
             currentView.element.trigger("show", [url]);
         } else {
-            var $element = $(this.ViewWrapperHtml).appendTo(this.$wrapper);
+            var $element = $(this.settings.ViewWrapperHtml).appendTo(this.$wrapper);
 
             $element.data("view-url", url);
 
@@ -222,7 +222,7 @@ class CuteViewer {
                 var urlArray = url.split("?");
                 var query = urlArray[1] || "";
                 var search = new URLSearchParams(query)
-                search.set("version", this.appVersion);
+                search.set("version", this.settings.appVersion);
 
                 url = urlArray[0] + "?" + search.toString();
             }
