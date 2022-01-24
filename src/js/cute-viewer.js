@@ -3,6 +3,7 @@ class CuteViewer {
     VIEWLIST = [];
     ROOTLIST = [];
     menuDataSource;
+    inited = false;
 
     settings = {
         // These are the defaults.
@@ -21,15 +22,20 @@ class CuteViewer {
         this.$this = $($el);
 
         if (options) {
-            this.settings = $.extend(true, this.settings, options);
+            this.init(options);
         }
     }
 
     init(options) {
-        this.settings = $.extend(true, this.settings, options);
-        this.$wrapper = $(this.settings.WrapperHtml).appendTo(this.$this);
-        this.setHashChangeEvent();
-        this.checkHashUrl();
+        if (!this.inited) {
+            this.settings = $.extend(true, this.settings, options);
+
+            this.$wrapper = $(this.settings.WrapperHtml).appendTo(this.$this);
+            this.setHashChangeEvent();
+            this.checkHashUrl();
+
+            this.inited = true;
+        }
     }
 
 

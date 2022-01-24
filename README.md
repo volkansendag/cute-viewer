@@ -26,7 +26,7 @@ viewer.init({
 or 
 
 ```
-var viewer = new CuteViewer("#viewer"{
+var viewer = new CuteViewer("#viewer", {
         indexUrl: "views/index.html",
         cacheable: false
 });

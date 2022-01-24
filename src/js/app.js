@@ -1,8 +1,6 @@
 $(function () {
 
-    var viewer = new CuteViewer("#viewer");
-
-    viewer.init({
+    var viewer = new CuteViewer("#viewer", {
         indexUrl: "views/index.html",
         cacheable: false
     });
